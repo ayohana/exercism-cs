@@ -79,3 +79,58 @@ Otherwise, the tests won't work.
         `````
         using (var file = new StreamReader("C:\\myfile.txt")) {...}
         `````
+
+### Floating-Point Types
+
+* [Characteristics of the Floating-Types:](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types#characteristics-of-the-floating-point-types)
+
+    | C# type/keyword | Approximate range | Precision | Size     | .NET type |
+    | :-------------- | :---------------- | :-------- | :------- | :-------- | 
+    | `float` | ±1.5 x 10−45 to ±3.4 x 1038 | ~6-9 digits | 4 bytes | `System.Single` | 
+    | `double` | ±5.0 × 10−324 to ±1.7 × 10308 | ~15-17 digits | 8 bytes | `System.Double` | 
+    | `decimal` | ±1.0 x 10-28 to ±7.9228 x 1028 | 28-29 digits | 16 bytes | `System.Decimal` | 
+
+* [The type of a real literal is determined by its **suffix**](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types#real-literals)
+  * Examples:
+    `````
+    // The literal without suffix or with the d or D suffix is of type double
+    double d = 3D;
+    d = 4d;
+    d = 3.934_001;
+
+    // The literal with the f or F suffix is of type float
+    float f = 3_000.5F;
+    f = 5.4f;
+
+    // The literal with the m or M suffix is of type decimal
+    decimal myMoney = 3_000.5m;
+    myMoney = 400.75M;
+    `````
+  * The preceding example also shows the use of **`_` (underscore) as a digit separator**, which is supported starting with C# 7.0.
+  * You can also use scientific notation, that is, specify an **exponent** part of a real literal. Example:
+    `````
+    double d = 0.42e2;
+    Console.WriteLine(d);  // output 42
+
+    float f = 134.45E-2f;
+    Console.WriteLine(f);  // output: 1.3445
+
+    decimal m = 1.5E6m;
+    Console.WriteLine(m);  // output: 1500000
+    `````
+
+### Constants vs ReadOnly's
+
+* [Constants are **immutable** values which are known at compile time and **do not change for the life of the program**.](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/constants)
+  * Constants are declared with the `const` modifier. 
+  * Use the `readonly` modifier to create a class, struct, or array that is **initialized one time** at runtime (for example in a constructor) and **thereafter cannot be changed.**
+    * Example: `public readonly int y = 5;`
+    * BAD Example: `public const readonly int y = 5; // ERROR`
+* [`const` vs `readonly`](https://stackoverflow.com/questions/55984/what-is-the-difference-between-const-and-readonly-in-c)
+  * There is subtle difference:
+    | `const` | `readonly` |
+    | :--------------------- | :--------------------- |
+    | `const`s are implicitly `static`. You use a `ClassName.ConstantName` notation to access them. | `readonly` can be either `instance`-level or `static`. |
+    | If you are confident that the value of the constant won't change use a `const`. | If you have a constant that may change (e.g. with respect to precision) or when in doubt, use a `readonly`.|
+    | `const` must be initialized at declaration time (therefore can't be changed anywhere). | `readonly` can be initialized on the constructor (and thus have a different value depending on the constructor used). |
+
