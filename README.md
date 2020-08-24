@@ -207,3 +207,9 @@ Source: [Compile-time vs Runtime](https://www.javatpoint.com/compile-time-vs-run
     | If you are confident that the value of the constant won't change use a `const`. | If you have a constant that may change (e.g. with respect to precision) or when in doubt, use a `readonly`.|
     | `const` must be initialized at declaration time (therefore can't be changed anywhere). | `readonly` can be initialized on the constructor (and thus have a different value depending on the constructor used). |
 
+### Enumerable.Take<TSource>(IEnumerable<TSource>, Int32) Method
+
+* [Returns a specified number of contiguous elements from the start of a sequence.](https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable.take?view=netcore-3.1#remarks)
+  * `Take` enumerates source and yields elements until `count` elements have been yielded or source contains no more elements.
+  * If `count` is greather than the number of elements in source, all elements of source are returned.
+  * If `count` is <= 0, an empty `IEnumerable<T>` is returned.
