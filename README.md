@@ -80,6 +80,79 @@ Otherwise, the tests won't work.
         using (var file = new StreamReader("C:\\myfile.txt")) {...}
         `````
 
+* [C# Coding Conventions for Implicitly Typed Local Variables](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions#implicitly-typed-local-variables)
+  * **Do not rely on the variable name to specify the type of the variable.** It might be incorrect.
+    `````
+    var inputInt = Console.ReadLine();
+    Console.WriteLine(inputInt);
+    `````
+  * When to use implicit typing, i.e. `var`:
+    * When the variable type is **obvious** from the right side of the assignment
+    * Or when the precise type is not important like below:
+      `````
+      var var1 = "This is clearly a string.";
+      var var2 = 27;
+      `````
+    * In `for` loops to determine the type of the loop variable:
+      `````
+      var phrase = "lalala";
+      var manyPhrases = new StringBuilder();
+      for (var i = 0; i < 10000; i++)
+      {
+          manyPhrases.Append(phrase);
+      }
+      `````
+  * When to **NOT** use implicit typing:
+    * When the type is **not** apparent from the right side of the assignment:
+      `````
+      int var3 = Convert.ToInt32(Console.ReadLine());
+      int var4 = ExampleClass.ResultSoFar();
+      `````
+    * Avoid the use of `var` in place of `dynamic`.
+
+    * In `foreach` loops to determine the type of the loop variable:
+      `````
+      foreach (char ch in laugh)
+      {
+          if (ch == 'h')
+              Console.Write("H");
+          else
+              Console.Write(ch);
+      }
+      Console.WriteLine();
+      `````
+
+### Compile-time vs Runtime
+
+| Compile-time         | Runtime            |
+| :------------------- | :----------------- |
+| The time at which the **source code is converted into an executable code** | The time at which the **executable code is started running** |
+| **Compile-time errors** can be: <br> - Syntax errors <br> - Semantic errors | **Runtime errors** are errors that occur during the execution and after compilation. These errors are not easy to detect as the compiler does not point to these errors. |
+| Example: <br> Missing semicolon at the end of a statement. | Example: <br> Division by zero, etc. |
+
+Source: [Compile-time vs Runtime](https://www.javatpoint.com/compile-time-vs-runtime#:~:text=Compile%2Dtime%20and%20Runtime%20are,executable%20code%20is%20started%20running.)
+
+### The `dynamic` type
+
+* [The `dynamic` type indicates that use of the variable and references to its members bypass compile-time type checking.](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/reference-types#the-dynamic-type)
+  * Type `dynamic` behaves like type `object` in most circumstances.
+  * How `dynamic` is different from `object` type:
+    * Operations that contain expressions of type `dynamic` are not resolved or type checked by the compiler. The compiler packages together information about the operation, and that information is later used to evaluate the operation at run time. As part of the process, **variables of type `dynamic` are compiled into variables of type `object`.** Therefore, **type `dynamic` exists only at compile time, not at run time.**
+* [Example - having to cast between decimal and double:](https://stackoverflow.com/questions/2690623/what-is-the-dynamic-type-in-c-sharp-4-0-used-for)
+  `````
+  decimal foo = GetDecimalValue();
+  foo = foo / 2.5;        // Does not compile
+  foo = Math.Sqrt(foo);   // Does not compile
+  string bar = foo.ToString("c");
+  `````
+  * The second line does not compile because 2.5 is typed as a `double` and line 3 does not compile because `Math.Sqrt` expects a `double`. Obviously, all you have to do is cast and/or change your variable type, but there may be situations where `dynamic` makes sense to use. See below:
+  `````
+  dynamic foo = GetDecimalValue(); // still returns a decimal
+  foo = foo / 2.5;        // The runtime takes care of this for us
+  foo = Math.Sqrt(foo);   // Again, the DLR (Dynamic Language Runtime) works its magic
+  string bar = foo.ToString("c");
+  `````
+
 ### Floating-Point Types
 
 * [Characteristics of the Floating-Types:](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/floating-point-numeric-types#characteristics-of-the-floating-point-types)
